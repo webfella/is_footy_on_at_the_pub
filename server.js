@@ -1,15 +1,10 @@
-var express = require('express'),
-    request = require('request'),
-    cheerio = require('cheerio'),
-    xml2js  = require('xml2js').parseString,
-    fs      = require('fs'),
-    app     = express();
+var express  = require('express'),
+    request  = require('request'),
+    cheerio  = require('cheerio'),
+    feedUtil = require('./feed'),
+    app      = express();
 
-var parseFeed = function(feed) {
-    return feed;
-};
-
-app.get('/feed', function(req, res) {
+app.get('/scrape', function(req, res) {
     request('http://foxsoccerplus.com/tvfeed/', function(err, resp, html) {
         var $, rawData;
 
@@ -17,26 +12,23 @@ app.get('/feed', function(req, res) {
             $ = cheerio.load(html);
             rawData = unescape($('script').first().text().split("'")[1]);
 
-            xml2js(rawData, function (err, data) {
-                if (!err) {
-                    res.set('Content-Type', 'application/json');
-                    res.send(parseFeed(data));
-                } else {
-                    console.error(err);
-                }
+            feedUtil.parseFeed(rawData, function(data) {
+                feedUtil.saveFeed(data);
+                res.json(data);
             });
         } else {
             console.error(err);
+            res.json(504, { error: 'Unable to access FoxSoccer feed, please try again later.' });
         }
     });
 });
 
 app.get('/', function(req, res) {
-    res.send('In progress, visit /feed data');
+    res.send('In progress, visit /feed.json for data');
 });
 
 app.listen('1337');
 
 console.log('App started on port 1337');
 
-exports = module.exports = app;
+module.exports = app;
