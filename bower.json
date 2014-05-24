@@ -1,0 +1,17 @@
+{
+  "name": "is_footy_on_at_the_pub",
+  "version": "1.0.0",
+  "authors": [
+    "Adrian Bruinhout <adrian@webfella.com.au>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "pure": "~0.4.2"
+  }
+}
