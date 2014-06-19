@@ -4,7 +4,7 @@ A small app to quickly digest when Fox Soccer is showing AFL content.
 
 ## Install
 
-`npm install && bower install`
+`npm install`
 
 ## Run
 
