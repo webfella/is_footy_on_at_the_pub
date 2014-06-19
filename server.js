@@ -1,25 +1,18 @@
 var express  = require('express'),
-    request  = require('request'),
-    cheerio  = require('cheerio'),
-    feedUtil = require('./feed'),
+    async    = require('async'),
+    feed     = require('./feed'),
     app      = express();
 
-app.get('/scrape', function(req, res) {
-    request('http://foxsoccerplus.com/tvfeed/', function(err, resp, html) {
-        var $, rawData;
+app.get('/scrape', function(req, res, next) {
+    var externalFeed = 'http://foxsoccerplus.com/tvfeed/',
+        localFeed    = 'feed.json';
 
-        if (!err) {
-            $ = cheerio.load(html);
-            rawData = unescape($('script').first().text().split("'")[1]);
-
-            feedUtil.parseFeed(rawData, function(data) {
-                feedUtil.saveFeed(data);
-                res.json(data);
-            });
-        } else {
-            console.error(err);
-            res.json(504, { error: 'Unable to access FoxSoccer feed, please try again later.' });
-        }
+    async.waterfall([
+        feed.scrapeFeed.bind(null, externalFeed),
+        feed.saveFeed.bind(null, localFeed)
+        ], function(err, data) {
+            if (err) { return next(err); }
+            res.json(data);
     });
 });
 

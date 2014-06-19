@@ -1,31 +1,45 @@
-var fs     = require('fs'),
-    xml2js = require('xml2js').parseString,
-    pub    = {};
+var fs       = require('fs'),
+    request  = require('request'),
+    cheerio  = require('cheerio'),
+    xml2js   = require('xml2js').parseString;
 
-pub.parseFeed = function(feed, cb) {
-    xml2js(feed, function(err, data) {
-        if (!err) {
-            cb(pub.filterFeed(data));
-        } else {
-            console.error(err);
-        }
+exports.scrapeFeed = function(feed, cb) {
+    request(feed, function(err, resp, html) {
+        var $, rawData;
+
+        if (err) { return cb(err); }
+
+        $ = cheerio.load(html);
+        rawData = unescape($('script').first().text().split("'")[1]);
+
+        exports.parseFeed(rawData, function(err, data) {
+            if (err) { return cb(err); }
+
+            cb(null, data);
+        });
     });
 };
 
-pub.filterFeed = function(feed) {
-    return feed;
+exports.parseFeed = function(feed, cb) {
+    xml2js(feed, function(err, data) {
+        if (err) { return cb(err); }
+
+        exports.filterFeed(data, function(err, data) {
+            if (err) { return cb(err); }
+
+            cb(null, data);
+        });
+    });
 };
 
-pub.saveFeed = function(feed) {
-    var fileName = 'feed.json';
+exports.filterFeed = function(feed, cb) {
+    return cb(null, feed);
+};
 
-    fs.writeFile(fileName, JSON.stringify(feed, null, 4), function(err) {
-        if (!err) {
-            console.log('Feed saved to ' + fileName + '.');
-        } else {
-            console.error(err);
-        }
+exports.saveFeed = function(filename, feed, cb) {
+    fs.writeFile(filename, JSON.stringify(feed, null, 4), function(err) {
+        if (err) { return cb(err); }
+
+        cb(null, feed);
     })
 };
-
-module.exports = pub;
