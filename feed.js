@@ -55,7 +55,7 @@ exports.filter = function(feed, cb) {
 };
 
 exports.save = function(filename, feed, cb) {
-    fs.writeFile(filename, JSON.stringify(feed, null, 4), function(err) {
+    fs.writeFile(filename, JSON.stringify(feed), function(err) {
         if (err) { return cb(err); }
 
         cb(null, feed);
