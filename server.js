@@ -1,28 +1,35 @@
-var express  = require('express'),
-    async    = require('async'),
-    feed     = require('./feed'),
-    app      = express(),
-    port     = '1337';
+var express = require('express'),
+    path    = require('path'),
+    logger  = require('morgan'),
+    less    = require('less-middleware'),
+    routes  = require('./routes'),
+    app     = express();
 
-app.get('/scrape', function(req, res, next) {
-    var externalFeed = 'http://foxsoccerplus.com/tvfeed/',
-        localFeed    = 'feed.json';
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-    async.waterfall([
-        feed.scrape.bind(null, externalFeed),
-        feed.save.bind(null, localFeed)
-        ], function(err, data) {
-            if (err) { return next(err); }
-            res.json(data);
+app.use(logger('dev'));
+app.use(less(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', routes);
+
+app.use(function(req, res, next) {
+    var err = new Error('Page Not Found');
+    err.status = 404;
+    next(err);
+});
+
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        title: err.message,
+        error: err
     });
 });
 
-app.get('/', function(req, res) {
-    res.send('In progress, visit /feed.json for data');
-});
+app.listen(app.get('port'));
 
-app.listen(port);
-
-console.log('App started on port ' + port);
+console.log('App started on port ' + app.get('port'));
 
 module.exports = app;

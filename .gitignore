@@ -3,3 +3,4 @@
 *.log
 node_modules
 feed.json
+public/css/*.css
