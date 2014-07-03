@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
 
 router.get('/scrape', function(req, res, next) {
     var externalFeed = 'http://foxsoccerplus.com/tvfeed/',
-        localFeed    = 'feed.json';
+        localFeed    = 'matches.json';
 
     async.waterfall([
         feed.scrape.bind(null, externalFeed),

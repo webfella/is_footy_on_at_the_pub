@@ -1,4 +1,5 @@
 var fs       = require('fs'),
+    path     = require('path'),
     _        = require('lodash'),
     request  = require('request'),
     cheerio  = require('cheerio'),
@@ -55,7 +56,9 @@ exports.filter = function(feed, cb) {
 };
 
 exports.save = function(filename, feed, cb) {
-    fs.writeFile(filename, JSON.stringify(feed), function(err) {
+    var file = path.join(__dirname, 'public/') + filename;
+
+    fs.writeFile(file, JSON.stringify(feed), function(err) {
         if (err) { return cb(err); }
 
         cb(null, feed);

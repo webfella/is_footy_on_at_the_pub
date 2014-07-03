@@ -2,5 +2,5 @@
 *.swp
 *.log
 node_modules
-feed.json
+public/*.json
 public/css/*.css
