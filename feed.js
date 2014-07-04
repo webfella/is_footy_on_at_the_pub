@@ -1,6 +1,6 @@
 var fs       = require('fs'),
     path     = require('path'),
-    _        = require('lodash'),
+    _        = require('underscore'),
     request  = require('request'),
     cheerio  = require('cheerio'),
     xml2js   = require('xml2js').parseString;
