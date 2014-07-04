@@ -1,12 +1,16 @@
 @import 'includes/utils';
 
+*, *:before, *:after {
+  .box-sizing();
+}
+
 body {
     background: #b4be42 url('/images/background.jpg') no-repeat 0 0 fixed;
     .background-size();
     color: @white;
     font: normal 30px Arial, Helvetica, sans-serif;
     margin: 0;
-    padding: 50px 0;
+    padding: @breathing-room @separator-lge;
     text-align: center;
     text-shadow: 1px 1px 0 @darkgreen;
 }
@@ -18,13 +22,77 @@ h1, h2, h3 {
 }
 
 .content {
-    background-color: @white;
     color: @darkgrey;
-    display: none;
     font-size: 14px;
-    margin: 0 auto;
-    max-width: 1000px;
+    line-height: 16px;
+    margin: @breathing-room auto 0;
+    max-width: 600px;
     text-align: left;
     text-shadow: none;
     width: 75%;
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+
+        th,
+        td {
+            border-left: 1px solid @darkgreen;
+            padding: @separator @separator-lge;
+
+            &:first-child {
+                border: none;
+                white-space: nowrap;
+                width: 25%;
+            }
+        }
+
+        th {
+            background-color: @darkgreen;
+            color: @white;
+            text-align: center;
+            .user-select();
+
+            span,
+            a {
+                display: inline-block;
+            }
+
+            span {
+                min-width: 220px;
+            }
+
+            a {
+                cursor: pointer;
+                outline: none;
+                padding: 0 @separator-lge;
+                text-decoration: none;
+
+                &:hover {
+                    color: #e5e5e5;
+                }
+            }
+        }
+
+        td {
+            background-color: @white;
+            background-color: fade(@white, 60%);
+            position: relative;
+            vertical-align: top;
+        }
+
+        .status {
+            float: right;
+            font-size: 12px;
+
+            &.live {
+                font-weight: bold;
+
+                &:after {
+                    content: '!';
+                    display: inline;
+                }
+            }
+        }
+    }
 }

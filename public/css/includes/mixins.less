@@ -4,3 +4,18 @@
     -o-background-size:cover;
     background-size:cover;
 }
+
+.box-sizing(@box: border-box) {
+    -webkit-box-sizing: @box;
+    -moz-box-sizing: @box;
+    box-sizing: @box;
+}
+
+.user-select(@select: none) {
+    -webkit-touch-callout: @select;
+    -webkit-user-select: @select;
+    -khtml-user-select: @select;
+    -moz-user-select: @select;
+    -ms-user-select: @select;
+    user-select: @select;
+}

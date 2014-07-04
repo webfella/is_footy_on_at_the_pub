@@ -28,6 +28,8 @@ app.use(function(err, req, res, next) {
     });
 });
 
+app.locals.pretty = true;
+
 app.listen(app.get('port'));
 
 console.log('App started on port ' + app.get('port'));
