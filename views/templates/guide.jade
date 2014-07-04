@@ -1,0 +1,21 @@
+script#guide-template(type="text/template").
+    <thead>
+        <tr>
+            <th colspan="2">
+                <a class="prev">&lsaquo;</a>
+                <span><%= format_date(date) %></span>
+                <a class="next">&rsaquo;</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <% _.each(matches, function(match) { %>
+            <tr>
+                <td class="time"><%= format_time(match.time, match.duration) %></td>
+                <td class="game">
+                    <%= match.title %>
+                    <span class="status <%= match.status.toLowerCase() %>"><%= match.status %></span>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
